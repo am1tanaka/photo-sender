@@ -16,6 +16,14 @@ gulp.task('git', function() {
     .pipe($.git.commit(comm));
 });
 
+// 開発デプロイ
+gulp.task('dev', ['git'], function() {
+  return gulp.src('.')
+    .pipe($.git.push('heroku', 'master',function (err) {
+      if (err) throw err;
+    }));
+});
+
 // ローカルで更新
 gulp.task('local', ['git'], function() {
   $.shell.task(
