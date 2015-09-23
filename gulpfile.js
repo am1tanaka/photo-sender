@@ -21,11 +21,13 @@ gulp.task('local', ['git'], function() {
   $.shell.task(
     ['heroku local web']
   );
+  /*
   browserSync({
     notify: false,
     logPrefix: 'BS',
     server: ['localhost:5000']
   });
+  */
 });
 
 gulp.task('default', ['local']);
