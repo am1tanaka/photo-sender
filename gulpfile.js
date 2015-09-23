@@ -18,7 +18,7 @@ gulp.task('git', function() {
 
 // 開発デプロイ
 gulp.task('dev', ['git'], function() {
-  return gulp.src('.')
+  return gulp.src('./*')
     .pipe($.git.push('heroku', 'master',function (err) {
       if (err) throw err;
     }))
