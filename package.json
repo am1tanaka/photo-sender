@@ -20,6 +20,5 @@
     "gulp-git": "^1.4.0",
     "gulp-load-plugins": "^1.0.0-rc.1",
     "gulp-shell": "^0.4.3",
-    "q": "^1.4.1"
   }
 }
