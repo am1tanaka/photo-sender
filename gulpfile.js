@@ -18,7 +18,7 @@ gulp.task('git', function() {
 
 // ローカルで更新
 gulp.task('local', ['git'], function() {
-  shell.task(
+  $.shell.task(
     ['heroku local web']
   );
   browserSync({
