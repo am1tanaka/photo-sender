@@ -17,6 +17,7 @@ gulp.task('git', function() {
 });
 
 // 開発デプロイ
+/*
 gulp.task('dev', ['git'], function() {
   return gulp.src('./*')
     .pipe($.git.push('heroku', 'master',function (err) {
@@ -24,7 +25,8 @@ gulp.task('dev', ['git'], function() {
     }));
     //.pipe($.shell(['echo done']));
 });
-
+*/
+/*
 // ローカルで更新
 gulp.task('local', ['git'], function() {
   $.shell.task(
@@ -37,6 +39,8 @@ gulp.task('local', ['git'], function() {
     server: ['localhost:5000']
   });
   */
+  /*
 });
+*/
 
 gulp.task('default', ['local']);
