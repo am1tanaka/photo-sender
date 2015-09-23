@@ -43,4 +43,8 @@ gulp.task('local', ['git'], function() {
 });
 */
 
-gulp.task('default', ['local']);
+gulp.task('default', ['git'], function() {
+  console.log('--m Commit Message.');
+  console.log('heroku local web');
+  console.log('git push heroku master');
+});
