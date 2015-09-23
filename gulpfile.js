@@ -21,8 +21,8 @@ gulp.task('dev', ['git'], function() {
   return gulp.src('./*')
     .pipe($.git.push('heroku', 'master',function (err) {
       if (err) throw err;
-    }))
-    .pipe($.shell(['echo done']));
+    }));
+    //.pipe($.shell(['echo done']));
 });
 
 // ローカルで更新
