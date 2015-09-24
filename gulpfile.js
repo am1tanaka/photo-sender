@@ -47,4 +47,5 @@ gulp.task('default', ['git'], function() {
   console.log('--m Commit Message.');
   console.log('heroku local web');
   console.log('git push heroku master');
+  console.log('heroku ps:scale web=1 && heroku open');
 });
