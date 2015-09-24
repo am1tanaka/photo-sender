@@ -26,14 +26,29 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
   var comment = req.body.report.comment || '';
   var place = req.body.report.place;
-  if (place.length == 0) {
+  if (place.length === 0) {
     res.render('index', {info: '', danger: '撮影場所を入力してください。'});
     return;
   }
 
   // メール
   var subject='多摩市の生き物報告';
-  var body = comment+'\r\n[status pending][category 投稿]';
+  var body = comment+'\r\n\r\n場所：'+place+'\r\n[status pending][category 投稿]';
+  var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+  sendgrid.send({
+    to:       process.env.SENDTO,
+    from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
+    subject:  subject,
+    text:     body
+  }, function(err, json) {
+    if (err) {
+      res.render('index', {danger: err, info: ''});
+      console.log(err);
+      return;
+    }
+
+    console.log(json);
+  });
 
   // 完了
   res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
