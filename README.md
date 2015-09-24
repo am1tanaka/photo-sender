@@ -14,6 +14,10 @@
 - メール送信は http://sendgrid.com/ 
     - https://devcenter.heroku.com/articles/sendgrid
 
+## 環境設定
+ローカルは.env、Heroku上はコマンドで以下を定義する。
+- MAILTO に送信先のメールアドレスを設定する
+
 ## アクセス
 - HerokuのルートをGETするとメール送信用のフォーム表示
 - submitするとPOSTで呼び出されるので送信処理
