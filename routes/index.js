@@ -53,6 +53,9 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         }
       ]
     }, function(err, json) {
+      // ファイルを削除
+      fs.unlink('uploads/*');
+      //
       if (err) {
         res.render('index', {danger: err, info: ''});
         console.log(err);
@@ -61,10 +64,9 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
       console.log('send mail ok.');
       console.log(json);
+      // 完了
+      res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
     });
-
-    // 完了
-    res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
   });
 });
 
