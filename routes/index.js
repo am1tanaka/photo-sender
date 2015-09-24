@@ -47,6 +47,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       return;
     }
 
+    console.log('send mail ok.');
     console.log(json);
   });
 
