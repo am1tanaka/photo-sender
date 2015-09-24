@@ -1,1 +1,1 @@
-web: npm start
+web: DEBUG=photo-sender npm start
