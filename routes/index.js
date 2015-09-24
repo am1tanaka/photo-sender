@@ -48,7 +48,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         }
       ]
   };
-  if (process.env.CC.lenth > 0) {
+  if (process.env.CC.length > 0) {
     sendparam.cc = process.env.CC;
   }
   sendgrid.send(sendparam, function(err, json) {
