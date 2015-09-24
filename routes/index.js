@@ -31,28 +31,41 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     return;
   }
 
-  // メール
-  var subject='多摩市の生き物報告';
-  var body = comment+'\r\n\r\n場所：'+place+'\r\n[status pending][category 投稿]';
-  var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
-  sendgrid.send({
-    to:       process.env.SENDTO,
-    from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
-    subject:  subject,
-    text:     body
-  }, function(err, json) {
-    if (err) {
-      res.render('index', {danger: err, info: ''});
-      console.log(err);
-      return;
-    }
+  // ファイル名を変更
+  var photopath = join(photo.destination, photo.originalname);
+  fs.rename(photo.path, photopath, function(err) {
+    if (err) return next(err);
 
-    console.log('send mail ok.');
-    console.log(json);
+    // メール
+    var subject='多摩市の生き物報告';
+    var body = comment+'\r\n\r\n場所：'+place+'\r\n[status pending][category 投稿]';
+    var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+    sendgrid.send({
+      to:       process.env.SENDTO,
+      from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
+      subject:  subject,
+      text:     body,
+      files: [
+        {
+          filename: photo.originalname,
+          contentType: photo.mimetype,
+          path: photopath
+        }
+      ]
+    }, function(err, json) {
+      if (err) {
+        res.render('index', {danger: err, info: ''});
+        console.log(err);
+        return;
+      }
+
+      console.log('send mail ok.');
+      console.log(json);
+    });
+
+    // 完了
+    res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
   });
-
-  // 完了
-  res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
 });
 
 module.exports = router;
