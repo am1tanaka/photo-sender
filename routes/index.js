@@ -35,19 +35,23 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var subject='多摩市の生き物報告';
   var body = comment+'\r\n\r\n場所：'+place+'\r\n[status pending][category 投稿]';
   var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
-  sendgrid.send({
-    to:       process.env.SENDTO,
-    from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
-    subject:  subject,
-    text:     body,
-    files: [
-      {
-        filename: photo.originalname,
-        contentType: photo.mimetype,
-        path: photo.path
-      }
-    ]
-  }, function(err, json) {
+  var sendparam =     {
+      to:       process.env.SENDTO,
+      from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
+      subject:  subject,
+      text:     body,
+      files: [
+        {
+          filename: photo.originalname,
+          contentType: photo.mimetype,
+          path: photo.path
+        }
+      ]
+  };
+  if (process.env.CC.lenth > 0) {
+    sendparam.cc = process.env.CC;
+  }
+  sendgrid.send(sendparam, function(err, json) {
     // ファイルを削除
     fs.unlink(photo.path);
     //
