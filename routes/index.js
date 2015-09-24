@@ -33,8 +33,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
   // ファイル名を変更
   var photopath = join(photo.destination, photo.originalname);
-  fs.rename(photo.path, photopath, function(err) {
-    if (err) return next(err);
+  //fs.rename(photo.path, photopath, function(err) {
+  //  if (err) return next(err);
 
     // メール
     var subject='多摩市の生き物報告';
@@ -49,7 +49,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         {
           filename: photo.originalname,
           contentType: photo.mimetype,
-          path: photopath
+          path: photo.path
         }
       ]
     }, function(err, json) {
@@ -67,7 +67,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       // 完了
       res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
     });
-  });
+  //});
 });
 
 module.exports = router;
