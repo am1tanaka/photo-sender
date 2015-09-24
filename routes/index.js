@@ -54,7 +54,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       ]
     }, function(err, json) {
       // ファイルを削除
-      fs.unlink(photopath);
+      fs.unlink(photo.path);
       //
       if (err) {
         res.render('index', {danger: err, info: ''});
