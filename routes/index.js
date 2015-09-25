@@ -28,7 +28,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
 
   // 画像縮小
-  imageMagick('uploads/IMG_1873_2.jpg')
+  imageMagick(photo.path)
     .autoOrient()
     .flip()
     .stream('png', function(err, stdout) {
