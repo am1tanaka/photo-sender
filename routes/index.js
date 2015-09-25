@@ -29,6 +29,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photopath = join(__dirname, photo.path);
 
   // 画像縮小
+  var resizeX = 343;
+  var resizeY = 257;
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
     .autoOrient();
