@@ -31,11 +31,11 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   imageMagick(photo.path)
     .autoOrient()
     .flip()
-    .stream('png', function(err, stdout) {
+    .stream('jpg', function(err, stdout) {
       if (err) return next(err);
 
       res.setHeader('Expires', new Date(Date.now()+60480000));
-      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Type', 'image/jpg');
       stdout.pipe(res);
 
       // ファイルを削除
