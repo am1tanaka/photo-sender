@@ -56,6 +56,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       names.forEach(function(name) {
         console.log(name);
       });
+      console.log(base.size().domain);
+      console.log(base.size().source);
       base.resize(resizeX, resizeY)
         .write(destpath, function(err) {
           if (err) {console.log(err);return next(err);}
