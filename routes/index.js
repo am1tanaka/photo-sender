@@ -51,8 +51,9 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
       // 画像縮小
       var datas = [];
-      var base = imageMagick(photopath)
-        .resize(resizeX, resizeY)
+      var base = imageMagick(photopath);
+      console.log('size='+base.size());
+      base.resize(resizeX, resizeY)
         .write(destpath, function(err) {
           if (err) {console.log(err);return next(err);}
 
