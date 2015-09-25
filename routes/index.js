@@ -21,7 +21,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
 
   // ファイル名を戻す
-  var photopath = join(__dirname, '../uploads', photo.filename);
+  var photopath = join(__dirname, '../uploads', photo.originalname);
   fs.rename(photo.path, photopath);
   console.log('file:'+photopath);
 
