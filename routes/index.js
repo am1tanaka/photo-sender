@@ -22,6 +22,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
   // ファイル名を戻す
   var photopath = join(__dirname, '../uploads', photo.originalname);
+  var ext = path.extname(photo.originalname);
+  var destpath = join(__dirname, '../uploads', path.basename(photo.originalname, ext)+"_out"+ext);
   fs.rename(photo.path, photopath);
   console.log('file:'+photopath);
 
@@ -31,7 +33,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
     .autoOrient()
-    .write(photopath, function(err) {
+    .write(destpath, function(err) {
       if (err) {console.log(err);return next(err);}
 
       console.log('convert done.');
