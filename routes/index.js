@@ -107,8 +107,6 @@ router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
 /* POST home page. */
 router.post('/', upload.single('filePhoto'), function(req,res,next) {
   // チェック
-  console.log(req.body);
-  console.log(req.file);
   if (!req.file) {
     res.render('index', {info:'', danger: '写真を設定してください。'});
     return;
@@ -210,6 +208,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       });
     });
   });
+  res.render('index', {info: '写真を送信中です...', danger: ''});
 });
 
 module.exports = router;
