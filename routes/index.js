@@ -53,7 +53,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       // 読み込みイベントを設定
       stdout.on('data', function(chunk) {
         datas.push(datas);
-        console.log(chunk.length+"/"+typeof(chunk));
+        console.log(chunk.length+"/"+chunk.constractor);
       }).on('end', function (chunk) {
         if (chunk) {datas.push(chunk);}
         var img = datas.join('');
