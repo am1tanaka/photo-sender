@@ -11,6 +11,10 @@ var imageMagick = gm.subClass({imageMagick: true});
 
 var router = express.Router();
 
+/** 最大サイズ*/
+var WIDTH_MAX = 1024;
+var HEIGHT_MAX = 768;
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { info: req.info, danger: req.danger });
@@ -28,12 +32,10 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   console.log('file:'+photopath);
 
   // 画像縮小
-  var resizeX = 343;
-  var resizeY = 257;
   var datas = [];
   var base = imageMagick(photopath)
-    .resize(resizeX, resizeY)
-    /*
+    .resize(WIDTH_MAX, HEIGHT_MAX)
+
     .write(destpath, function(err) {
       if (err) {console.log(err);return next(err);}
 
@@ -41,7 +43,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       fs.unlink(photopath);
       res.render('index', {info: '画像テスト', danger: ''});
     });
-    */
+
+    /*
     .stream('jpg', function(err, stdout, stderr) {
       if (err) {
         // ファイルを削除
@@ -78,8 +81,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         res.send(img);
       });
     });
-
-  //res.render('index', {info: '画像テスト', danger: ''});
+    */
 });
 
 /* POST home page. */
