@@ -6,11 +6,14 @@ var multer = require('multer'); // v1.0.5
 var upload = multer({dest: 'uploads/',
   limits: {fields: 10,fileSize: 10000000,files: 1}
 });
+var gm = require('gm');
+var imageMagick = gm.subClass({imageMatick: true});
 
 var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  console.log(imageMagick);
   res.render('index', { info: req.info, danger: req.danger });
 });
 
