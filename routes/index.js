@@ -35,7 +35,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       if (err) {
         // ファイルを削除
         console.log("error:"+err);
-        fs.unlink(photopath);
+        //fs.unlink(photopath);
         return next(err);
       }
       console.log('ok');
@@ -43,7 +43,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       res.setHeader('Content-Type', 'image/png');
       stdout.pipe(res);
       // ファイルを削除
-      fs.unlink(photopath);
+      //fs.unlink(photopath);
     });
 
   //res.render('index', {info: '画像テスト', danger: ''});
