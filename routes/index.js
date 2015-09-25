@@ -69,14 +69,11 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
           datas[i].copy(img, offset);
         }
 
-
-        res.render('index', {info: 'データサイズ:'+img.length, danger: ''});
+        //res.render('index', {info: 'データサイズ:'+img.length, danger: ''});
         // 吐き出しが終わったので、出力
-        /*
         res.setHeader('Expires', new Date(Date.now() + 604800000));
         res.setHeader('Content-Type', 'image/jpg');
-        res.write(datas);
-        */
+        res.send(img);
       });
     });
 
