@@ -11,34 +11,57 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <link rel="stylesheet" href="https://s1.wp.com/_static/??-eJydUltSwzAMvBCuh04o8MFwFttREqdW5PGjpbdHTiDQl5nhx9HKu5K8kTx6YWhKMCWJWXiXeztFGdE6OPlAI5h0jjYmxgd5R5Z1NMH6ZIlRR87RscYf6ABB6Ky1A1ank4OVbifjcstpTshWxcFygbhBO11TxigT3+81faxBra+z+6KC5JXZixnV6KrlrkKrwPeGUKx4EVk5UZqnW4NaNUMBOI9epcJAaK0CB8i0mgz97ltVwoEnr7ZZRtXaB4hR8Ik2o0gDN/pjPCyjLK7M5p9lrqRLRemzlsqoltsYdfErb3QBpNEuZ43GfsIv/8VhW2P3QMKRUWX9zoDonLKhJg2gHfUc9vOTf2BNlCiKAJ5CEh0FvMT/WimBpG3dO2XKm4p2jWp0TzEtBsg4qFCe+PWtezlBWJb6ZnhvD4ZG9o60coXwjm+PTbN92jUvr8/jJ7CnqoE=">
   </head>
   <body>
-    <form class='container' method='post' enctype='multipart/form-data'>
-      <h3>多摩市の生き物情報をお寄せください。</h3>
+
+    <div class='container'>
+      <div id="main-nav">
+				<ul id="menuhead" class="menu">
+          <li id="menu-item-17" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17"><a href="https://tamabio.wordpress.com/">ホーム</a></li>
+          <li id="menu-item-16" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-16"><a href="https://tamabio.wordpress.com/list/">投稿された生き物</a></li>
+          <li id="menu-item-26" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-26"><a href="https://tamabio.wordpress.com/want/">探している生き物</a></li>
+          <li id="menu-item-22" class="menu-item menu-item-type-post_type menu-item-object-page page_item page-item-1 current-menu-item current_page_itemmenu-item-22"><a href=".">情報提供はこちらから</a></li>
+        </ul>
+      </div>
+
+      <h1>多摩市の生き物情報をお寄せください。</h1>
+
+      <p><a href='https://tamabio.wordpress.com/want/' target='_blank'>探している生き物</a>ページにある生き物を
+      多摩市内でみつけましたら、写真に撮影して情報をお寄せください。
+    </p>
+    <p>以下のフォームから、撮影した写真、撮影した場所、撮影した生き物の名前などを記入して送信してください。
+      送信していただいたデータは、ワークグループ内で情報を整理をして、公開できるものは
+      <a href='https://tamabio.wordpress.com/list/' target='_blank'>投稿された生き物</a>ページに
+      掲載いたします。
+    </p>
+    <p>多摩市を知る活動へのご協力、お願いいたします。</p>
+    <hr />
 
       <p class='bg-danger'><%= danger %></p>
       <p class='bg-info' id='info'><%= info %></p>
 
+      <formmethod='post' enctype='multipart/form-data'>
       <div class="form-group">
         <label for="filePhoto">1. 写真</label>
         <input type="file" id="filePhoto" name='filePhoto' accept='image/*'/>
         <p class="help-block">生き物を写した写真があれば添付してください。</p>
       </div>
 
-      <div class="form-group">
-        <label for="textComment">2. コメント</label>
-        <textarea class="form-control" name='report[comment]' rows="3" id='textComment'
-          placeholder="アレチウリ、キショウブ、カヤネズミなど・・・"
-        ></textarea>
-        <p class="help-block">もし生き物の種類が分かっていれば記載してください。特になければ省略。</p>
-      </div>
-
       <div class='form-group'>
-        <label for="textPos">3. 撮影場所</label>
+        <label for="textPos">2. 撮影場所</label>
         <input type='text' class='form-control' id='textPos' name='report[place]'
         placeholder="桜ヶ丘公園の富士見の丘、大栗川と乞田川の合流点、乞田大橋近くなど・・・"
         />
         <p class='help-block'>公園や道路、近くの目印、どこの町の何丁目など、おおよその場所を記入してください。</p>
+      </div>
+
+      <div class="form-group">
+        <label for="textComment">3. コメント</label>
+        <textarea class="form-control" name='report[comment]' rows="3" id='textComment'
+          placeholder="アレチウリ、キショウブ、カヤネズミなど・・・"
+        ></textarea>
+        <p class="help-block">もし生き物の種類が分かっていれば記載してください。特になければ空欄にしておいてください。</p>
       </div>
 
       <!--
@@ -49,6 +72,26 @@
       <input type='submit' id='submitSend' class='btn btn-primary form-control' value='送信'></input>
 
     </form>
+
+    <footer>
+      本ページは以下のライブラリーを利用しています。
+      <div class='help-block'>
+        ・<a href='https://github.com/expressjs/body-parser'>body-parser</a>
+        ・<a href='https://github.com/expressjs/cookie-parser'>cookie-parser</a>
+        ・<a href="https://github.com/visionmedia/debug">debug</a>
+        ・<a href="https://github.com/mde/ejs">ejs</a>
+        ・<a href="https://github.com/gomfunkel/node-exif">exif</a>
+        ・<a href="http://expressjs.com/">Express</a>
+        ・<a href="http://aheckmann.github.io/gm/">gm</a>
+        ・<a href="https://github.com/expressjs/morgan">morgan</a>
+        ・<a href="https://github.com/expressjs/multer">multer</a>
+        ・<a href="https://github.com/sendgrid/sendgrid-nodejs">sendgrid</a>
+      </div>
+      <hr />
+      <div class='copyright'>Copyright 2015 YuTanaka@多摩市多様性調査WG</div>
+    </footer>
+
+  </div>
 
     <script type='text/javascript'>
     <!--
