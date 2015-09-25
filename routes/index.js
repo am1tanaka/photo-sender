@@ -31,7 +31,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
     .autoOrient()
-    .stream('png', function(err, stdout, stderr) {
+    .stream('jpg', function(err, stdout, stderr) {
       if (err) {
         // ファイルを削除
         console.log("error:"+err);
@@ -40,7 +40,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       }
       console.log('ok');
       res.setHeader('Expires', new Date(Date.now() + 604800000));
-      res.setHeader('Content-Type', 'image/png');
+      res.setHeader('Content-Type', 'image/jpg');
       stdout.pipe(res);
     });
 
