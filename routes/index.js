@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 });
 
 /** 画像テスト。完了したら終了*/
-router.post('/', upload.single('filePhoto'), function(req,res,next) {
+router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
 
   // ファイル名を戻す
@@ -52,12 +52,6 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       // 画像縮小
       var datas = [];
       var base = imageMagick(photopath);
-      var names = Object.getOwnPropertyNames(base.size());
-      names.forEach(function(name) {
-        console.log(name);
-      });
-      console.log(base.size().domain);
-      console.log(base.size().source);
       base.resize(resizeX, resizeY)
         .write(destpath, function(err) {
           if (err) {console.log(err);return next(err);}
@@ -111,7 +105,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 });
 
 /* POST home page. */
-router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
+router.post('/', upload.single('filePhoto'), function(req,res,next) {
   // チェック
   console.log(req.body);
   console.log(req.file);
@@ -128,44 +122,96 @@ router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
   }
 
   // 画像縮小
-  var img = imageMagick(photo.path);
-  console.log('img='+img);
-  console.log('size='+img.size());
+  // ファイル名を戻す
+  var photopath = join(__dirname, '../uploads', photo.originalname);
+  fs.rename(photo.path, photopath, function(err) {
+    if (err)  return next(err);
 
-  // メール
-  var subject='多摩市の生き物報告';
-  var body = comment+'\r\n\r\n場所：'+place+'\r\n[status pending][category 投稿]';
-  var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
-  var sendparam =     {
-      to:       process.env.SENDTO,
-      from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
-      subject:  subject,
-      text:     body,
-      files: [
-        {
-          filename: photo.originalname,
-          contentType: photo.mimetype,
-          path: photo.path
+    // EXIFテスト
+    new ExifImage({image: photopath}, function(err, exifData) {
+      if (err)  return next(err);
+
+      var resizeX = exifData.exif.ExifImageWidth || WIDTH_MAX;
+      var resizeY = exifData.exif.ExifImageHeight || HEIGHT_MAX;
+      // EXIFの幅情報が有効な時、サイズチェック
+      if (exifData.exif.ExifImageWidth) {
+        if (  (exifData.exif.ExifImageWidth > WIDTH_MAX)
+          ||  (exifData.exif.ExifImageHeight > HEIGHT_MAX)) {
+          resizeX = WIDTH_MAX;
+          resizeY = HEIGHT_MAX;
         }
-      ]
-  };
-  if (process.env.CC.length > 0) {
-    sendparam.cc = process.env.CC;
-  }
-  sendgrid.send(sendparam, function(err, json) {
-    // ファイルを削除
-    fs.unlink(photo.path);
-    //
-    if (err) {
-      res.render('index', {danger: err, info: ''});
-      console.log(err);
-      return;
-    }
+      }
 
-    console.log('send mail ok.');
-    console.log(json);
-    // 完了
-    res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
+      // 画像縮小
+      var datas = [];
+      imageMagick(photopath)
+      .resize(resizeX, resizeY)
+      .stream('jpg', function(err, stdout, stderr) {
+        if (err) {
+          // ファイルを削除
+          console.log("error:"+err);
+          fs.unlink(photopath);
+          return next(err);
+        }
+
+        // 読み込みイベントを設定
+        stdout.on('data', function(chunk) {
+          datas.push(chunk);
+        }).on('end', function (chunk) {
+          if (chunk) {datas.push(chunk);}
+
+          // データを結合する
+          var sz = 0;
+          for (var i=0 ; i<datas.length ; i++) {
+            sz += datas[i].length;
+          }
+          var img = new Buffer(sz);
+          var offset = 0;
+          for (i=0 ; i<datas.length ; offset+=datas[i].length,i++) {
+            datas[i].copy(img, offset);
+          }
+
+          // ファイルを削除
+          fs.unlink(photopath);
+
+          // メール
+          var subject='多摩市の生き物報告';
+          var body = comment+'\r\n\r\n場所：'+place+'\r\n[status pending][category 投稿]';
+          var sendgrid  = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+          var sendparam =     {
+              to:       process.env.SENDTO,
+              from:     'tama-bioreserch-sysmas<yrk00337@nifty.com>',
+              subject:  subject,
+              text:     body,
+              files: [
+                {
+                  filename: photo.originalname,
+                  contentType: photo.mimetype,
+                  content: img
+                }
+              ]
+          };
+          if (process.env.CC.length > 0) {
+            sendparam.cc = process.env.CC;
+          }
+          sendgrid.send(sendparam, function(err, json) {
+            // ファイルを削除
+            fs.unlink(photo.path);
+            //
+            if (err) {
+              res.render('index', {danger: err, info: ''});
+              console.log(err);
+              return;
+            }
+
+            console.log('send mail ok.');
+            console.log(json);
+            // 完了
+            res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
+          });
+        });
+      });
+    });
   });
 });
 
