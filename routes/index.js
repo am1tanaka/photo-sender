@@ -192,11 +192,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
           sendparam.cc = process.env.CC;
         }
 
-        /*
         sendgrid.send(sendparam, function(err, json) {
-          // ファイルを削除
-          fs.unlink(photopath);
-          //
           if (err) {
             res.render('index', {danger: err, info: ''});
             console.log(err);
@@ -205,13 +201,12 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
           console.log('send mail:'+json.message);
           // 完了
-          */
-          //res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
-        //});
+          res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
+        });
       });
     });
   });
-  res.render('index', {info: '写真を送信中です...', danger: ''});
+  //res.render('index', {info: '写真を送信中です...', danger: ''});
 });
 
 module.exports = router;
