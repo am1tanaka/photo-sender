@@ -32,13 +32,13 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var resizeY = 257;
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
-    /*
-    .autoOrient()*/
+    .autoOrient()
     .write(destpath, function(err) {
       if (err) {console.log(err);return next(err);}
 
       console.log('convert done.');
       fs.unlink(photopath);
+      res.render('index', {info: '画像テスト', danger: ''});
     });
     /*
     .stream('jpg', function(err, stdout, stderr) {
