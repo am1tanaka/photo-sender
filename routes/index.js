@@ -26,9 +26,10 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     return;
   }
   var photo = req.file;
+  var photopath = join(photo.path);
 
   // 画像縮小
-  imageMagick(photo.path)
+  imageMagick(photopath)
     .autoOrient()
     .flip()
     .stream('png', function(err, stdout) {
