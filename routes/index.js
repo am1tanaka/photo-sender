@@ -45,7 +45,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   res.send(img.stream('jpg'))
   */
   res.render('index', {info: '画像テスト', danger: ''});
-}
+});
 
 
 /* POST home page. */
