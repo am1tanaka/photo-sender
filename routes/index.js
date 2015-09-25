@@ -37,20 +37,22 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     if (err)  return next(err);
     var metadata = exif(data);
     console.log(metadata);
+
+    // 画像縮小
+    var datas = [];
+    var base = imageMagick(photopath)
+      .resize(WIDTH_MAX, HEIGHT_MAX)
+
+      .write(destpath, function(err) {
+        if (err) {console.log(err);return next(err);}
+
+        console.log('convert done.');
+        fs.unlink(photopath);
+        res.render('index', {info: '画像テスト', danger: ''});
+      });
+
   });
 
-  // 画像縮小
-  var datas = [];
-  var base = imageMagick(photopath)
-    .resize(WIDTH_MAX, HEIGHT_MAX)
-
-    .write(destpath, function(err) {
-      if (err) {console.log(err);return next(err);}
-
-      console.log('convert done.');
-      fs.unlink(photopath);
-      res.render('index', {info: '画像テスト', danger: ''});
-    });
 
     /*
     .stream('jpg', function(err, stdout, stderr) {
