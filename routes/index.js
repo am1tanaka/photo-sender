@@ -27,7 +27,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   }
   var photo = req.file;
   var photopath = join(__dirname, photo.path);
-  photopath = __dirname+'/nodejs.png';
+  //photopath = __dirname+'/nodejs.png';
 
   // 画像縮小
   var resizeX = 343;
