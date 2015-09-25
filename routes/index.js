@@ -30,7 +30,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   // 画像縮小
   var resizeX = 343;
   var resizeY = 257;
-  var datas = '';
+  var datas = [];
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
     .autoOrient()
@@ -52,11 +52,12 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       }
       // 読み込みイベントを設定
       stdout.on('data', function(chunk) {
-        datas += chunk;
-        console.log(chunk.length+"/"+datas.length);
+        datas.push(datas);
+        console.log(chunk.length);
       }).on('end', function (chunk) {
-        if (chunk) {datas+=chunk;        console.log(chunk.length+"/"+datas.length);}
-        res.render('index', {info: 'データサイズ:'+datas.length, danger: ''});
+        if (chunk) {datas.push(chunk);}
+        var img = datas.join('');
+        res.render('index', {info: 'データサイズ:'+img.length, danger: ''});
         // 吐き出しが終わったので、出力
         /*
         res.setHeader('Expires', new Date(Date.now() + 604800000));
