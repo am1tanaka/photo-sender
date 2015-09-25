@@ -7,7 +7,7 @@ var upload = multer({dest: 'uploads/',
   limits: {fields: 10,fileSize: 10000000,files: 1}
 });
 var gm = require('gm');
-var imageMagick = gm.subClass({imageMatick: true});
+var imageMagick = gm.subClass({imageMagick: true});
 
 var router = express.Router();
 
