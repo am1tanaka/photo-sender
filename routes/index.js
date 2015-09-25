@@ -37,6 +37,10 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     // EXIFテスト
     new ExifImage({image: photopath}, function(err, exifData) {
       if (err)  return next(err);
+      var props = Object.getOwnPropertyNames(exifData.image);
+      props.forEach(function(name) {
+        console.log("["+name+"]"+props[name]);
+      });
       console.log(exifData.image.XResolution+"/"+exifData.image.YResolution);
       console.log(exifData.exif.ExifImageWidth+"/"+exifData.exif.ExifImageHeight);
 
