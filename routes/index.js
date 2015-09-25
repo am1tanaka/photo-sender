@@ -23,7 +23,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   // ファイル名を戻す
   var photopath = join(__dirname, '../uploads', photo.originalname);
   var ext = path.extname(photo.originalname);
-  var destpath = join(__dirname, '../uploads', path.basename(photo.originalname, ext)+"_out"+ext);
+  //var destpath = join(__dirname, '../uploads', path.basename(photo.originalname, ext)+"_out"+ext);
   fs.rename(photo.path, photopath);
   console.log('file:'+photopath);
 
@@ -33,7 +33,6 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var datas = [];
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
-    .autoOrient()
     /*
     .write(destpath, function(err) {
       if (err) {console.log(err);return next(err);}
@@ -68,6 +67,9 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         for (i=0 ; i<datas.length ; offset+=datas[i].length,i++) {
           datas[i].copy(img, offset);
         }
+
+        // ファイルを削除
+        fs.unlink(photopath);
 
         //res.render('index', {info: 'データサイズ:'+img.length, danger: ''});
         // 吐き出しが終わったので、出力
