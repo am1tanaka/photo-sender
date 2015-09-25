@@ -18,15 +18,8 @@ router.get('/', function(req, res, next) {
 
 /** 画像テスト。完了したら終了*/
 router.post('/', upload.single('filePhoto'), function(req,res,next) {
-  // チェック
-  console.log(req.body);
-  console.log(req.file);
-  if (!req.file) {
-    res.render('index', {info:'', danger: '写真を設定してください。'});
-    return;
-  }
   var photo = req.file;
-  var photopath = join(__dirname, photo.path);
+  var photopath = join(__dirname, photo.path+"a");
   //photopath = __dirname+'/nodejs.png';
 
   // 画像縮小
