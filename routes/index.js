@@ -21,7 +21,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
   var photopath = join(__dirname, photo.path);
   //photopath = __dirname+'/nodejs.png';
-  photopath = photo.path;
+  photopath = join('/Users/yutanaka/git/photo-sender/',photo.path);
 
   console.log('file:'+photopath);
 
