@@ -196,7 +196,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
           }
           sendgrid.send(sendparam, function(err, json) {
             // ファイルを削除
-            fs.unlink(photo.path);
+            fs.unlink(photopath);
             //
             if (err) {
               res.render('index', {danger: err, info: ''});
