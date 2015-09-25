@@ -29,28 +29,32 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photopath = join(__dirname, '../uploads', photo.originalname);
   var ext = path.extname(photo.originalname);
   var destpath = join(__dirname, '../uploads', path.basename(photo.originalname, ext)+"_out"+ext);
-  fs.rename(photo.path, photopath);
-  console.log('file:'+photopath);
-
-  // EXIFテスト
-  fs.readFile(photopath, function(err,data) {
+  fs.rename(photo.path, photopath, function(err) {
     if (err)  return next(err);
-    var metadata = exif(data);
-    console.log(metadata);
 
-    // 画像縮小
-    var datas = [];
-    var base = imageMagick(photopath)
-      .resize(WIDTH_MAX, HEIGHT_MAX)
+    console.log('file:'+photopath);
 
-      .write(destpath, function(err) {
-        if (err) {console.log(err);return next(err);}
+    // EXIFテスト
+    fs.readFile(photopath, function(err,data) {
+      if (err)  return next(err);
+      var metadata = exif(data);
+      console.log("exif="+metadata);
 
-        console.log('convert done.');
-        fs.unlink(photopath);
-        res.render('index', {info: '画像テスト', danger: ''});
-      });
+      // 画像縮小
+      var datas = [];
+      var base = imageMagick(photopath)
+        .resize(WIDTH_MAX, HEIGHT_MAX)
 
+        .write(destpath, function(err) {
+          if (err) {console.log(err);return next(err);}
+
+          console.log('convert done.');
+          fs.unlink(photopath);
+          res.render('index', {info: '画像テスト', danger: ''});
+        });
+
+    });
+    
   });
 
 
