@@ -53,10 +53,23 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       // 読み込みイベントを設定
       stdout.on('data', function(chunk) {
         datas.push(datas);
-        console.log(chunk.length+"/"+chunk.constractor);
+        console.log(chunk.length+"/"+chunk.constructor);
       }).on('end', function (chunk) {
         if (chunk) {datas.push(chunk);}
-        var img = datas.join('');
+
+        // データを結合する
+        var sz = 0;
+        for (var i=0 ; i<datas.length ; i++) {
+          sz += datas[i].length;
+        }
+        console.log('size='+sz);
+        var img = new Buffer(sz);
+        var offset = 0;
+        for (i=0 ; i<datas.length ; offset+=datas[i].length,i++) {
+          datas[i].copy(img, offset);
+        }
+
+
         res.render('index', {info: 'データサイズ:'+img.length, danger: ''});
         // 吐き出しが終わったので、出力
         /*
