@@ -35,8 +35,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
   // 画像縮小
   var img = imageMagick(photo.path);
-  console.log('img='+img[0]);
-  console.log('size='+img.size()[0]);
+  console.log('img='+img);
+  console.log('size='+img.size());
 
   // 画像表示
   /*
