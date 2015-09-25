@@ -19,15 +19,10 @@ router.get('/', function(req, res, next) {
 /** 画像テスト。完了したら終了*/
 router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
+
   // ファイル名を戻す
-
-
-  var photopath = join(__dirname, photo.path);
-  //photopath = __dirname+'/nodejs.png';
-  //photopath = join('/Users/yutanaka/git/photo-sender/',photo.path);
-  //photopath = join('/Users/yutanaka/git/photo-sender/','nodejs.png');
-  photopath = join(__dirname,'nodejs.png');
-
+  var photopath = join(__dirname, '../uploads', photo.filename);
+  fs.rename(photo.path, photopath);
   console.log('file:'+photopath);
 
   // 画像縮小
@@ -40,7 +35,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       if (err) {
         // ファイルを削除
         console.log("error:"+err);
-        fs.unlink(photo.path);
+        fs.unlink(photopath);
         return next(err);
       }
       console.log('ok');
@@ -48,7 +43,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       res.setHeader('Content-Type', 'image/png');
       stdout.pipe(res);
       // ファイルを削除
-      fs.unlink(photo.path);
+      fs.unlink(photopath);
     });
 
   //res.render('index', {info: '画像テスト', danger: ''});
