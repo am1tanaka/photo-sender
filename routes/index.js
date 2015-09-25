@@ -58,7 +58,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         // 吐き出しが終わったので、出力
         res.setHeader('Expires', new Date(Date.now() + 604800000));
         res.setHeader('Content-Type', 'image/jpg');
-        res.send(datas);
+        res.write(datas);
       });
     });
 
