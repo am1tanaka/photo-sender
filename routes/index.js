@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var join = path.join;
-var exif = require('exif-reader');
+var ExifImage = require('exif').ExifImage;
 var multer = require('multer'); // v1.0.5
 var upload = multer({dest: 'uploads/',
   limits: {fields: 10,fileSize: 10000000,files: 1}
@@ -35,11 +35,11 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     console.log('file:'+photopath);
 
     // EXIFテスト
-    fs.readFile(photopath, function(err,data) {
+    new ExifImage({image: photopath}, function(err, exifData) {
       if (err)  return next(err);
-      var metadata = exif(data);
-      console.log("exif="+metadata);
+      console.log("exif="+exifData);
 
+      // その後の処理
       // 画像縮小
       var datas = [];
       var base = imageMagick(photopath)
@@ -52,9 +52,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
           fs.unlink(photopath);
           res.render('index', {info: '画像テスト', danger: ''});
         });
-
     });
-    
   });
 
 
