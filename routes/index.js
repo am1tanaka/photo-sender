@@ -29,22 +29,13 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photopath = join(__dirname, photo.path);
 
   // 画像縮小
-  imageMagick(photopath)
-    .autoOrient()
-    .flip()
-    .stream('png', function(err, stdout) {
-      if (err) {      // ファイルを削除
-        fs.unlink(photo.path);
-        return next(err);
-      }
+  var base = imageMagick(photopath)
+    .resize(resizeX, resizeY)
+    .autoOrient();
+    write(base, res, next);
 
-      res.setHeader('Expires', new Date(Date.now()+60480000));
-      res.setHeader('Content-Type', 'image/png');
-      stdout.pipe(res);
-
-      // ファイルを削除
-      fs.unlink(photo.path);
-    });
+  // ファイルを削除
+  fs.unlink(photo.path);
 
 
   // 画像表示
@@ -56,6 +47,14 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   //res.render('index', {info: '画像テスト', danger: ''});
 });
 
+function write (base, res, next) {
+  base.stream('png', function (err, stdout, stderr) {
+    if (err) return next(err);
+    res.setHeader('Expires', new Date(Date.now() + 604800000));
+    res.setHeader('Content-Type', 'image/png');
+    stdout.pipe(res);
+  });
+}
 
 /* POST home page. */
 router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
