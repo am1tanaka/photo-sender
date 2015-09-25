@@ -34,30 +34,22 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var resizeY = 257;
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
-    .autoOrient();
-    write(base, res, next);
+    .autoOrient()
+    .stream('png', function(err, stdout, stderr) {
+      if (err) {
+        // ファイルを削除
+        fs.unlink(photo.path);
+        return next(err);
+      }
+      res.setHeader('Expires', new Date(Date.now() + 604800000));
+      res.setHeader('Content-Type', 'image/png');
+      stdout.pipe(res);
+      // ファイルを削除
+      fs.unlink(photo.path);
+    });
 
-  // ファイルを削除
-  fs.unlink(photo.path);
-
-
-  // 画像表示
-  /*
-  res.setHeader('Expires', new Date(Date.now()+604800000));
-  res.setHeader('Content-Type', 'image/jpg');
-  res.send(img.stream('jpg'))
-  */
   //res.render('index', {info: '画像テスト', danger: ''});
 });
-
-function write (base, res, next) {
-  base.stream('png', function (err, stdout, stderr) {
-    if (err) return next(err);
-    res.setHeader('Expires', new Date(Date.now() + 604800000));
-    res.setHeader('Content-Type', 'image/png');
-    stdout.pipe(res);
-  });
-}
 
 /* POST home page. */
 router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
