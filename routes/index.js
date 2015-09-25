@@ -26,17 +26,18 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     return;
   }
   var photo = req.file;
-  var comment = req.body.report.comment || '';
-  var place = req.body.report.place;
-  if (place.length === 0) {
-    res.render('index', {info: '', danger: '撮影場所を入力してください。'});
-    return;
-  }
 
   // 画像縮小
   var img = imageMagick(photo.path);
   console.log('img='+img);
   console.log('size='+img.size());
+
+  img.size(function(err, value) {
+    console.log('size='+value);
+  })
+
+  // ファイルを削除
+  fs.unlink(photo.path);
 
   // 画像表示
   /*
