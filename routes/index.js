@@ -53,8 +53,9 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       // 読み込みイベントを設定
       stdout.on('data', function(chunk) {
         datas += chunk;
+        console.log(datas.length);
       }).on('end', function (chunk) {
-        if (chunk) {datas+=chunk;}
+        if (chunk) {datas+=chunk;        console.log(datas.length);}
         res.render('index', {info: 'データサイズ:'+datas.length, danger: ''});
         // 吐き出しが終わったので、出力
         /*
