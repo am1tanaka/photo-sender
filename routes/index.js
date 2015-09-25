@@ -19,8 +19,10 @@ router.get('/', function(req, res, next) {
 /** 画像テスト。完了したら終了*/
 router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
-  var photopath = join(__dirname, photo.path+"a");
+  var photopath = join(__dirname, photo.path);
   //photopath = __dirname+'/nodejs.png';
+
+  console.log('file:'+photopath);
 
   // 画像縮小
   var resizeX = 343;
