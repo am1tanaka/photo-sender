@@ -28,16 +28,20 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
 
   // 画像縮小
-  var img = imageMagick(photo.path);
-  console.log('img='+img);
-  console.log('size='+img.size());
+  imageMagick(photo.path)
+    .autoOrient()
+    .flip()
+    .stream('png', function(err, stdout) {
+      if (err) return next(err);
 
-  img.size(function(err, value) {
-    console.log('size='+value);
-  });
+      res.setHeader('Expires', new Date(Date.now()+60480000));
+      res.setHeader('Content-Type', 'image/png');
+      stdout.pipe(res);
 
-  // ファイルを削除
-  fs.unlink(photo.path);
+      // ファイルを削除
+      fs.unlink(photo.path);
+    });
+
 
   // 画像表示
   /*
@@ -45,7 +49,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   res.setHeader('Content-Type', 'image/jpg');
   res.send(img.stream('jpg'))
   */
-  res.render('index', {info: '画像テスト', danger: ''});
+  //res.render('index', {info: '画像テスト', danger: ''});
 });
 
 
