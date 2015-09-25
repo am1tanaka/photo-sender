@@ -11,6 +11,29 @@ var imageMagick = gm.subClass({imageMagick: true});
 
 var router = express.Router();
 
+var stream = require('stream');
+var util = require('util');
+
+/* バイナリ受け取りストリーム*/
+function Stream2Binary(cb) {
+  this.writable = true;
+  this.buf = [];
+  this.callback = cb;
+}
+util.inherits(Stream2Binary, stream.Stream);
+
+Stream2Binary.prototype.write = function (data) {
+    this.buf.push(data);
+    return true;
+};
+Stream2Binary.prototype.end = function(data) {
+  if (data) {
+    this.buf.push(data);
+  }
+  // データを受け取り終わったのでコールバック
+  if (this.callback) this.callback();
+};
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { info: req.info, danger: req.danger });
@@ -30,9 +53,13 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   // 画像縮小
   var resizeX = 343;
   var resizeY = 257;
+  var stream2bin = new Stream2Binary(function() {
+
+  });
   var base = imageMagick(photopath)
     .resize(resizeX, resizeY)
     .autoOrient()
+    /*
     .write(destpath, function(err) {
       if (err) {console.log(err);return next(err);}
 
@@ -40,7 +67,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       fs.unlink(photopath);
       res.render('index', {info: '画像テスト', danger: ''});
     });
-    /*
+    */
     .stream('jpg', function(err, stdout, stderr) {
       if (err) {
         // ファイルを削除
@@ -48,12 +75,17 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         fs.unlink(photopath);
         return next(err);
       }
-      console.log('ok');
-      res.setHeader('Expires', new Date(Date.now() + 604800000));
-      res.setHeader('Content-Type', 'image/jpg');
-      stdout.pipe(res);
+      console.log('stream start');
+      //res.setHeader('Expires', new Date(Date.now() + 604800000));
+      //res.setHeader('Content-Type', 'image/jpg');
+      //stdout.pipe(res);
+      stdout.on('data', function(chunk) {
+        console.log(chunk.length);
+      }).on('end', function (chunk) {
+        console.log('end');
+        if (chunk) {console.log(chunk.length);}
+      });
     });
-    */
 
   //res.render('index', {info: '画像テスト', danger: ''});
 });
