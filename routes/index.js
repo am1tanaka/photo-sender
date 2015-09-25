@@ -13,11 +13,10 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log(imageMagick);
   res.render('index', { info: req.info, danger: req.danger });
 });
 
-/* POST home page. */
+/** 画像テスト。完了したら終了*/
 router.post('/', upload.single('filePhoto'), function(req,res,next) {
   // チェック
   console.log(req.body);
@@ -33,6 +32,43 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     res.render('index', {info: '', danger: '撮影場所を入力してください。'});
     return;
   }
+
+  // 画像縮小
+  var img = imageMagick(photo.path);
+  console.log('img='+img[0]);
+  console.log('size='+img.size()[0]);
+
+  // 画像表示
+  /*
+  res.setHeader('Expires', new Date(Date.now()+604800000));
+  res.setHeader('Content-Type', 'image/jpg');
+  res.send(img.stream('jpg'))
+  */
+  res.render('index', {info: '画像テスト', danger: ''});
+}
+
+
+/* POST home page. */
+router.post('/commentout', upload.single('filePhoto'), function(req,res,next) {
+  // チェック
+  console.log(req.body);
+  console.log(req.file);
+  if (!req.file) {
+    res.render('index', {info:'', danger: '写真を設定してください。'});
+    return;
+  }
+  var photo = req.file;
+  var comment = req.body.report.comment || '';
+  var place = req.body.report.place;
+  if (place.length === 0) {
+    res.render('index', {info: '', danger: '撮影場所を入力してください。'});
+    return;
+  }
+
+  // 画像縮小
+  var img = imageMagick(photo.path);
+  console.log('img='+img);
+  console.log('size='+img.size());
 
   // メール
   var subject='多摩市の生き物報告';
