@@ -34,7 +34,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
   img.size(function(err, value) {
     console.log('size='+value);
-  })
+  });
 
   // ファイルを削除
   fs.unlink(photo.path);
