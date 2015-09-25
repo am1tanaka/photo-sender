@@ -206,7 +206,6 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       });
     });
   });
-  //res.render('index', {info: '写真を送信中です...', danger: ''});
 });
 
 module.exports = router;
