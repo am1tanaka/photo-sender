@@ -31,9 +31,11 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     .stream('png', function(err, stdout, stderr) {
       if (err) {
         // ファイルを削除
+        console.log("error:"+err);
         fs.unlink(photo.path);
         return next(err);
       }
+      console.log('ok');
       res.setHeader('Expires', new Date(Date.now() + 604800000));
       res.setHeader('Content-Type', 'image/png');
       stdout.pipe(res);
