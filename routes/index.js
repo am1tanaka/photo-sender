@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 var join = path.join;
+var exif = require('exiftool');
 var multer = require('multer'); // v1.0.5
 var upload = multer({dest: 'uploads/',
   limits: {fields: 10,fileSize: 10000000,files: 1}
@@ -30,6 +31,15 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var destpath = join(__dirname, '../uploads', path.basename(photo.originalname, ext)+"_out"+ext);
   fs.rename(photo.path, photopath);
   console.log('file:'+photopath);
+
+  // EXIFテスト
+  fs.readFile(photopath, function(err,data) {
+    if (err)  return next(err);
+    exif.metadata(data, function(err, metadata) {
+      if (err) return next(err);
+      console.log(metadata);
+    });
+  });
 
   // 画像縮小
   var datas = [];
