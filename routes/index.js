@@ -52,8 +52,8 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       }
       // 読み込みイベントを設定
       stdout.on('data', function(chunk) {
-        datas.push(datas);
-        console.log(chunk.length+"/"+chunk.constructor);
+        datas.push(chunk);
+        console.log(chunk.length);
       }).on('end', function (chunk) {
         if (chunk) {datas.push(chunk);}
 
