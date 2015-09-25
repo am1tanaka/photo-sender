@@ -28,14 +28,17 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var photo = req.file;
 
   // 画像縮小
-  imageMagick(photo.path)
+  imageMagick('uploads/IMG_1873_2.jpg')
     .autoOrient()
     .flip()
-    .stream('jpg', function(err, stdout) {
-      if (err) return next(err);
+    .stream('png', function(err, stdout) {
+      if (err) {      // ファイルを削除
+        fs.unlink(photo.path);
+        return next(err);
+      }
 
       res.setHeader('Expires', new Date(Date.now()+60480000));
-      res.setHeader('Content-Type', 'image/jpg');
+      res.setHeader('Content-Type', 'image/png');
       stdout.pipe(res);
 
       // ファイルを削除
