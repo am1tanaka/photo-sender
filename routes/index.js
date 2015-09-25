@@ -170,6 +170,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
 
         // ファイルを削除
         fs.unlink(photopath);
+        /*
 
         // メール
         var subject='多摩市の生き物報告';
@@ -191,6 +192,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
         if (process.env.CC.length > 0) {
           sendparam.cc = process.env.CC;
         }
+
         sendgrid.send(sendparam, function(err, json) {
           // ファイルを削除
           fs.unlink(photopath);
@@ -205,6 +207,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
           // 完了
           res.render('index', {info: '送信を完了しました。情報のご提供、ありがとうございます。引き続きご報告いただけます。', danger: ''});
         });
+        */
       });
     });
   });
