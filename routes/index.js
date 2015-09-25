@@ -41,7 +41,7 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
       console.log('ok');
       res.setHeader('Expires', new Date(Date.now() + 604800000));
       res.setHeader('Content-Type', 'image/png');
-      stdout.pipe(res).end(function() {fs.unlink(photopath);});
+      stdout.pipe(res);
     });
 
   //res.render('index', {info: '画像テスト', danger: ''});
