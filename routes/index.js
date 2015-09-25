@@ -31,8 +31,9 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
   var resizeX = 343;
   var resizeY = 257;
   var base = imageMagick(photopath)
+  /*
     .resize(resizeX, resizeY)
-    .autoOrient()
+    .autoOrient()*/
     .write(destpath, function(err) {
       if (err) {console.log(err);return next(err);}
 
