@@ -15,6 +15,7 @@ var router = express.Router();
 /** 最大サイズ*/
 var WIDTH_MAX = 1024;
 var HEIGHT_MAX = 768;
+var FILESIZE_MAX = 1000000;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -37,19 +38,29 @@ router.post('/', upload.single('filePhoto'), function(req,res,next) {
     // EXIFテスト
     new ExifImage({image: photopath}, function(err, exifData) {
       if (err)  return next(err);
-      var props = Object.getOwnPropertyNames(exifData.image);
-      props.forEach(function(name) {
-        console.log("["+name+"]"+props[name]);
-      });
-      console.log(exifData.image.XResolution+"/"+exifData.image.YResolution);
-      console.log(exifData.exif.ExifImageWidth+"/"+exifData.exif.ExifImageHeight);
+
+      var filest = fs.statSync(photopath);
+      console.log('size='+filest.size+"/"+filest.blksize);
+
+      var resizeX = exifData.exif.ExifImageWidth || WIDTH_MAX;
+      var resizeY = exifData.exif.ExifImageHeight || HEIGHT_MAX;
+      // EXIFの幅情報が有効な時、サイズチェック
+      if (exifData.exif.ExifImageWidth) {
+        if (  (exifData.exif.ExifImageWidth > WIDTH_MAX)
+          ||  (exifData.exif.ExifImageHeight > HEIGHT_MAX)) {
+          resizeX = WIDTH_MAX;
+          resizeY = HEIGHT_MAX;
+        }
+      }
+      else {
+        // サイズがない場合はファイルサイズのチェック
+      }
 
       // その後の処理
       // 画像縮小
       var datas = [];
       var base = imageMagick(photopath)
         .resize(WIDTH_MAX, HEIGHT_MAX)
-
         .write(destpath, function(err) {
           if (err) {console.log(err);return next(err);}
 
