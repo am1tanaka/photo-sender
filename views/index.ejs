@@ -58,11 +58,12 @@
         <input type='text' class='form-control' id='textPos' name='report[place]'
         placeholder="桜ヶ丘公園の富士見の丘、大栗川と乞田川の合流点、乞田大橋近くなど・・・"
         />
-        <p class='help-block'>公園や道路、近くの目印、どこの町の何丁目など、おおよその場所を記入してください。</p>
+        <p class='help-block' maxlength='256'>公園や道路、近くの目印、どこの町の何丁目など、おおよその場所を記入してください。
+          <br/>緯度経度が分かりましたら併せて入力してください。写真に含まれていればそれで結構です。</p>
       </div>
 
       <div class="form-group">
-        <label for="textComment">3. コメント</label>
+        <label for="textComment" maxlength='256'>3. コメント</label>
         <textarea class="form-control" name='report[comment]' rows="3" id='textComment'
           placeholder="アレチウリ、キショウブ、カヤネズミなど・・・"
         ></textarea>
